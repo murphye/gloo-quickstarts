@@ -76,7 +76,7 @@ It is advised to use Helm to install Gloo Edge on OpenShift.
 oc new-project gloo-system
 helm repo add gloo https://storage.googleapis.com/solo-public-helm
 
-helm install gloo gloo/gloo --namespace gloo-system --set gloo.gateway.validation.enabled=false --set gloo.deployment.floatingUserId=false
+helm install gloo gloo/gloo --namespace gloo-system -f values.yaml
 ```
 
 It will take a brief moment for Gloo Edge to install and run. You can check with `oc get pods -n gloo-system` to make sure the pods are running.
@@ -137,3 +137,5 @@ oc cluster up
 
 * https://docs.okd.io/3.11/cli_reference/get_started_cli.html#installing-the-cli
 * https://docs.solo.io/gloo-edge/latest/getting_started
+* https://docs.solo.io/gloo-edge/latest/installation/platform_configuration/cluster_setup/#openshift
+* https://docs.solo.io/gloo-edge/latest/installation/platform_configuration/cluster_setup/#minishift

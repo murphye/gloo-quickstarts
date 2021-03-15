@@ -1,0 +1,15 @@
+gloo:
+  deployment:
+    floatingUserId: true
+discovery:
+  deployment:
+    floatingUserId: true
+gateway:
+  deployment:
+    floatingUserId: true
+gatewayProxies:
+  gatewayProxy:
+    podTemplate:
+      floatingUserId: true
+      disableNetBind: true
+      runUnprivileged: true
