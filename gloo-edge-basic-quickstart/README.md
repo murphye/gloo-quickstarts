@@ -6,7 +6,7 @@ This Quickstart is intended to show the very basics of installing Gloo Edge and 
 
 ## Time to Complete
 
-This exercise will take **under 5 minutes**.
+This will take you **under 5 minutes**.
 
 ## Tested With
 
