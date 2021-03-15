@@ -1,4 +1,4 @@
-# Gloo Edge Minimal Quickstart
+# Gloo Edge Basic Quickstart
 
 ## About this Quickstart
 
@@ -6,7 +6,7 @@ This Quickstart is intended to show the very basics of installing Gloo Edge and 
 
 ## Time to Complete
 
-This exercise will take about **5 minutes**.
+This exercise will take **under 5 minutes**.
 
 ## Tested With
 
@@ -90,6 +90,12 @@ Expected result:
 ```
 
 If you receive `curl: (52) Empty reply from server`, it means that the Virtual Service is not yet ready, as MetalLB may still have been starting up. Please wait a moment and try again.
+
+## Next Steps
+
+Please see the [Gloo Edge Quickstart Guide](https://docs.solo.io/gloo-edge/latest/guides/traffic_management/hello_world/) for more information about this exercise.
+
+## Wrapping Up
 
 ### Stop k3d Cluster
 
