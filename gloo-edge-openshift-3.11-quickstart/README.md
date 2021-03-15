@@ -6,12 +6,13 @@ This Quickstart is intended to show the very basics of installing Gloo Edge onto
 
 ## Time to Complete
 
-This exercise will take **under 5 minutes**.
+This will take you **about 5 minutes**.
 
 ## Tested With
 
-* OpenShift (OKD) 3.11.0 (Linux)
+* OpenShift (OKD) 3.11.0 (Linux CLI)
 * Gloo Edge 1.6.15
+* Helm 3.5.2
 
 ## Prerequisites
 
@@ -31,7 +32,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/in
 
 ### Install Command Line Tools (as needed)
 
-#### OpenShift CLI
+#### Install OpenShift CLI
 
 This is the Linux CLI download link. Your best bet is to run this exercise in Linux, and a virtual machine would be OK.
 ```bash
@@ -41,10 +42,10 @@ tar -zvxf openshift-origin-client-tools-v3.11.0–0cbc58b-linux-64bit.tar.gz
 ```
 Put `oc` on your executable path, or simply run with `./oc`.
 
-#### Gloo Edge CLI
+#### Install Helm CLI
 
 ```
-brew install glooctl
+brew install helm
 ```
 
 ## Local OpenShift Cluster
