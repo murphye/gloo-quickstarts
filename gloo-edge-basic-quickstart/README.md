@@ -18,6 +18,13 @@ This exercise will take **under 5 minutes**.
 
 These setup commmands use Homebrew, and work on Mac, Linux, and Windows Subsystem for Linux (WSL).
 
+### Clone Project
+
+```bash
+git clone https://github.com/murphye/gloo-quickstarts.git
+cd gloo-edge-minimal-quickstart
+```
+
 ### Install Homebrew
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -28,13 +35,6 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/in
 brew install kubernetes-cli
 brew install glooctl
 brew install k3d
-```
-
-### Clone Project
-
-```bash
-git clone https://github.com/murphye/gloo-quickstarts.git
-cd gloo-edge-minimal-quickstart
 ```
 
 ## Local Kubernetes Cluster
