@@ -2,7 +2,7 @@
 
 ## About this Quickstart
 
-This Quickstart is intended to show the very basics of installing Gloo Edge and running a simple Petstore sample application demo.
+This Quickstart is intended to show the very basics of installing Gloo Edge and running a simple Petstore application demo.
 
 ## Time to Complete
 
@@ -89,7 +89,7 @@ Expected result:
 [{"id":1,"name":"Dog","status":"available"},{"id":2,"name":"Cat","status":"pending"}]
 ```
 
-If you get `curl: (52) Empty reply from server`, it means that the Virtual Service is not yet ready, as MetalLB may still have been starting up. Please wait a moment and try again.
+If you receive `curl: (52) Empty reply from server`, it means that the Virtual Service is not yet ready, as MetalLB may still have been starting up. Please wait a moment and try again.
 
 ### Stop k3d Cluster
 
