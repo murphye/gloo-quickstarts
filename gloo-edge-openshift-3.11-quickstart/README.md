@@ -6,13 +6,17 @@ This Quickstart is intended to show the very basics of installing Gloo Edge onto
 
 ## Time to Complete
 
-This will take you **about 5 minutes**.
+This will take you **about 15 minutes**.
 
 ## Tested With
 
-* OpenShift (OKD) 3.11.0 (Linux CLI)
+* OpenShift (OKD) 3.11.0 (using Ubuntu in a virtual machine)
 * Gloo Edge 1.6.15
 * Helm 3.5.2
+
+## System Requirements
+
+**You will need at least 12 GB of system memory, otherwise OpenShift may not start up.** If using a virtual machine, increase the size of your memory allocation to the VM.
 
 ## Prerequisites
 
@@ -22,7 +26,7 @@ These setup commmands use Homebrew, and work on Mac, Linux, and Windows Subsyste
 
 ```bash
 git clone https://github.com/murphye/gloo-quickstarts.git
-cd gloo-edge-openshift-3.11-quickstart
+cd gloo-quickstarts/gloo-edge-openshift-3.11-quickstart
 ```
 
 ### Install Homebrew (as needed)
@@ -42,9 +46,10 @@ tar -zvxf openshift-origin-client-tools-v3.11.0–0cbc58b-linux-64bit.tar.gz
 ```
 Put `oc` on your executable path, or simply run with `./oc`.
 
-#### Install Helm CLI
+#### Install Gloo Edge and Helm CLI
 
-```
+```bash
+brew install glooctl
 brew install helm
 ```
 
@@ -52,38 +57,59 @@ brew install helm
 
 **Docker is required to run the examples.**
 
+### Configure Docker Insecure Registries
+
+Edit your Docker config (i.e. `sudo nano /root/.docker/config.json`) to configure the insecure-registries as such:
+
+```json
+{
+  "insecure-registries" : [ "172.30.0.0/16" ]
+}
+```
+
+### Unblock or Disable Firewall 
+
+OpenShift may not startup correctly because of the default firewall rules. If there are startup issues, try disabling your firewall.
+
+#### RHEL and Fedora
+
+See https://github.com/openshift/origin/blob/release-3.11/docs/cluster_up_down.md#linux
+
 ### Start OpenShift Cluster
 
-This example uses the `oc cluster up` mechanism to run OpenShift 3.11 locally, rather than use Minishift.
+This example uses the `oc cluster up` mechanism to run OpenShift 3.11 locally, rather than use Minishift. Run as `sudo` if your user is not in the `docker` group. Otherwise `sudo` not needed
 
 ```bash
-oc cluster up
+mkdir -p "$HOME/.occluster"
+sudo oc cluster up --base-dir="$HOME/.occluster"
+sudo chmod -R 707 ~/.occluster/
 ```
 
 ### Log in as the OpenShift Administrator
 
 ```bash
-export KUBECONFIG=openshift.local.clusterup/openshift-apiserver/admin.kubeconfig
+export KUBECONFIG=~/.occluster/openshift-apiserver/admin.kubeconfig
 
 oc login -u system:admin
 ```
 
 ## Install Gloo Edge via `helm`
 
-It is advised to use Helm to install Gloo Edge on OpenShift.
+It is advised to use Helm to install Gloo Edge on OpenShift. 
 
 ```bash
 oc new-project gloo-system
-helm repo add gloo https://storage.googleapis.com/solo-public-helm
+oc adm policy add-scc-to-group anyuid system:serviceaccounts:gloo-system
 
 helm install gloo gloo/gloo --namespace gloo-system -f values.yaml
 ```
 
-It will take a brief moment for Gloo Edge to install and run. You can check with `oc get pods -n gloo-system` to make sure the pods are running.
+It will take a  moment for Gloo Edge to install and run. You can check with `oc get pods -n gloo-system` to make sure the pods are running. You should also consider running `glooctl check` to make sure Gloo Edge is running correctly.
 
 ## Excercise: Install the Petstore Sample Application
 
 ```bash
+oc new-project petstore
 oc apply -f https://raw.githubusercontent.com/solo-io/gloo/v1.2.9/example/petstore/petstore.yaml
 ```
 
@@ -136,6 +162,7 @@ oc cluster up
 ## References
 
 * https://docs.okd.io/3.11/cli_reference/get_started_cli.html#installing-the-cli
+* https://github.com/openshift/origin/issues/21420
 * https://docs.solo.io/gloo-edge/latest/getting_started
 * https://docs.solo.io/gloo-edge/latest/installation/platform_configuration/cluster_setup/#openshift
 * https://docs.solo.io/gloo-edge/latest/installation/platform_configuration/cluster_setup/#minishift
