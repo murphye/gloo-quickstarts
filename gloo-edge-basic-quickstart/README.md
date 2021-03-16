@@ -22,7 +22,7 @@ These setup commmands use Homebrew, and work on Mac, Linux, and Windows Subsyste
 
 ```bash
 git clone https://github.com/murphye/gloo-quickstarts.git
-cd gloo-edge-minimal-quickstart
+cd gloo-quickstarts/gloo-edge-minimal-quickstart
 ```
 
 ### Install Homebrew
