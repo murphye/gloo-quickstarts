@@ -1,4 +1,4 @@
-# Gloo Edge OpenShift 3.11 Quickstart
+# Gloo Edge OpenShift 3.11 Quickstart (Work in Progress)
 
 ## About this Quickstart
 
