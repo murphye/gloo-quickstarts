@@ -104,7 +104,37 @@ oc adm policy add-scc-to-group anyuid system:serviceaccounts:gloo-system
 helm install gloo gloo/gloo --namespace gloo-system -f values.yaml
 ```
 
-It will take a  moment for Gloo Edge to install and run. You can check with `oc get pods -n gloo-system` to make sure the pods are running. You should also consider running `glooctl check` to make sure Gloo Edge is running correctly.
+Take special notice of the `oc adm policy add-scc-to-group` change to give all service account in the `gloo-system` namespace permission to create volumes. Without setting these permissions, there will be several errors.
+
+It will take a moment for Gloo Edge to install and run. You can check with `oc get pods -n gloo-system` to make sure the pods are running. You should also run `glooctl check` to make sure Gloo Edge is running correctly.
+
+---
+
+## TODO #1
+
+Gloo Edge is currently unsettled after the installation. Further research is needed to resolve this matter.
+
+```
+Checking deployments... OK
+Checking pods... OK
+Checking upstreams... OK
+Checking upstream groups... OK
+Checking auth configs... OK
+Checking rate limit configs... OK
+Checking secrets... OK
+Checking virtual services... OK
+Checking gateways... OK
+Checking proxies... 1 Errors!
+Error: 1 error occurred:
+	* Your gateway-proxy is out of sync with the Gloo control plane and is not receiving valid gloo config.
+You may want to try using the `glooctl proxy logs` or `glooctl debug logs` commands.
+```
+
+## TODO #2
+
+Need to either access the gloo-proxy through a container or expose via the OpenShift Router. More work required to get this working.
+
+---
 
 ## Excercise: Install the Petstore Sample Application
 
