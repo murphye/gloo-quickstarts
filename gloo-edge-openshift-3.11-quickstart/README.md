@@ -67,6 +67,8 @@ Edit your Docker config (i.e. `sudo nano /root/.docker/config.json`) to configur
 }
 ```
 
+You will need to restart the Docker service after making this change.
+
 ### Unblock or Disable Firewall 
 
 OpenShift may not startup correctly because of the default firewall rules. If there are startup issues, try disabling your firewall.
