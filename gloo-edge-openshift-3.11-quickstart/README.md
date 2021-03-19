@@ -6,7 +6,7 @@ This Quickstart is intended to show the very basics of installing Gloo Edge onto
 
 ## Time to Complete
 
-This will take you **about 15 minutes**.
+This will take you **about 20 minutes**.
 
 ## Tested With
 
@@ -103,6 +103,7 @@ It is advised to use Helm to install Gloo Edge on OpenShift.
 oc new-project gloo-system
 oc adm policy add-scc-to-group anyuid system:serviceaccounts:gloo-system
 
+helm repo update
 helm install gloo gloo/gloo --namespace gloo-system -f values.yaml
 ```
 
@@ -141,7 +142,7 @@ Need to either access the gloo-proxy through a container or expose via the OpenS
 ## Excercise: Install the Petstore Sample Application
 
 ```bash
-oc new-project petstore
+oc project default
 oc apply -f https://raw.githubusercontent.com/solo-io/gloo/v1.2.9/example/petstore/petstore.yaml
 ```
 

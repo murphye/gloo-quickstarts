@@ -1,0 +1,27 @@
+settings:
+  create: false
+  writeNamespace: gloo-system
+  watchNamespaces:
+  - default
+gloo:
+  deployment:
+    floatingUserId: true
+discovery:
+  deployment:
+    floatingUserId: true
+gateway:
+  deployment:
+    floatingUserId: true
+  validation:
+    enabled: true
+    webhook:
+      enabled: false
+  certGenJob:
+    floatingUserId: true
+gatewayProxies:
+  gatewayProxy:
+    podTemplate:
+      floatingUserId: true
+      disableNetBind: true
+      runUnprivileged: true
+
