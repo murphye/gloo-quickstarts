@@ -93,11 +93,11 @@ kubectl -n default rollout status deployment petstore
 ## Create an Istio Gateway
 
 ```
-kubectl apply -f - <<EOF
+kubectl apply -n istio-system -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: petstore-gateway
+  name: istio-ingressgateway
 spec:
   selector:
     istio: ingressgateway # use Istio default gateway implementation
@@ -123,7 +123,7 @@ spec:
   hosts:
   - "petstore.com"
   gateways:
-  - petstore-gateway
+  - istio-system/istio-ingressgateway
   http:
   - match:
     - uri:
@@ -138,7 +138,7 @@ EOF
 
 Check that the route is working:
 ```
-url -HHost:petstore.com http://localhost/api/pets
+curl -HHost:petstore.com http://localhost/api/pets
 ``` 
 
 Expected result is:
@@ -194,7 +194,7 @@ Check the status:
 kubectl get apidoc -n default petstore-schema -oyaml
 ```
 
-### Create an API Product
+## Create an API Product
 
 ```
 cat << EOF | kubectl apply -f -
@@ -239,6 +239,38 @@ spec:
     tags:
       stable: {}
 EOF
+```
+
+## Create an Environment
+
+```
+cat << EOF | kubectl apply -f -
+apiVersion: devportal.solo.io/v1alpha1
+kind: Environment
+metadata:
+  name: dev
+  namespace: default
+spec:
+  domains:
+  - api.petstore.com
+  displayInfo:
+    description: This environment is meant for developers to deploy and test their APIs.
+    displayName: Development
+  apiProducts:
+  - name: petstore-product
+    namespace: default
+    publishedVersions:
+    - name: v1
+EOF
+```
+
+At this point you can check the status of the VirtualServices to make sure `dev` was created correctly:
+
+```
+kubectl get virtualservice
+NAME       GATEWAYS                              HOSTS               AGE
+dev        [istio-system/istio-ingressgateway]   [api.example.com]   2m59s
+petstore   [istio-system/istio-ingressgateway]   [petstore.com]      85m
 ```
 
 ## Next Steps
