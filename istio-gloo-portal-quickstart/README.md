@@ -361,6 +361,18 @@ kubectl get portal -n default petstore-portal -oyaml
 
 Use your web browser and go to http://developers.petstore.com.
 
+## Access Portal Admin
+
+Localhost:
+```
+kubectl port-forward -n dev-portal svc/admin-server 9080:8080
+```
+Open http://localhost:9080 in your browser, and the admin UI should be accessible.
+
+Optional: Running `kubectl` on remote server (bind to 0.0.0.0)
+```
+kubectl port-forward -n dev-portal svc/admin-server --address 0.0.0.0 9080:8080
+```
 
 ## Next Steps
 
