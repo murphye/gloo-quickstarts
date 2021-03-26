@@ -355,7 +355,7 @@ Check the status. Look for `state: Succeeded`.
 kubectl get portal -n default petstore-portal -oyaml
 ```
 
-Use your web browser and go to http://developers.petstore.com.
+Use your web browser and go to http://developers.petstore.com. This assumes you have added `developers.petstore.com` to your `/etc/host`. 
 
 ## Access Portal Admin
 
