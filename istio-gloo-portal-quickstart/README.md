@@ -8,7 +8,7 @@ This Quickstart is intended to show how to use Gloo Portal with Istio Ingress.
 
 * k3d 4.3.0
 * MetalLB 0.9.5
-* Gloo Edge 1.6.15
+* Gloo Portal 0.6.0
 * Istio 1.7.7
 
 ## Prerequisites
