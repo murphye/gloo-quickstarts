@@ -4,10 +4,6 @@
 
 This Quickstart is intended to show how to use Gloo Portal with Istio Ingress.
 
-## Time to Complete
-
-This will take you **under 5 minutes**.
-
 ## Tested With
 
 * k3d 4.3.0
