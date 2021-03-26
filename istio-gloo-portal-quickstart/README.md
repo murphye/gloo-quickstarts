@@ -52,9 +52,11 @@ bash cluster-up.sh istio-gloo-portal-quickstart
 
 It will take a brief moment for MetalLB to install and run. You can check with `kubectl get pods -n metallb-system` to make sure the pods are running.
 
+
 ## Install Istio with Istio Ingress via `istioctl` and the Istio Operator
 
 For this Quickstart we just need a basic installation of Istio and Istio Ingress.
+
 
 ```
 istioctl operator init
@@ -77,6 +79,22 @@ Verify the installation:
 kubectl get pods -n istio-system
 ```
 
+### Optional: Install Istio Operator with Helm (for older Istio Version)
+
+By using the Helm install, it seems to avoid some issues with Istio Operator for older versions.
+
+```
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.7.7 TARGET_ARCH=x86_64 sh -
+
+cd istio-1.7.7
+
+helm template manifests/charts/istio-operator/ \
+  --set hub=docker.io/istio \
+  --set tag=1.7.7 \
+  --set operatorNamespace=istio-operator \
+  --set watchedNamespaces=istio-system | kubectl apply -f -
+```
+
 ### Enable Istio Injection
 
 ```
@@ -86,7 +104,7 @@ kubectl label namespace default istio-injection=enabled --overwrite
 ## Install the Petstore Sample Application
 
 ```
-kubectl apply -n default -f https://raw.githubusercontent.com/solo-io/gloo/v1.3.7/example/petstore/petstore.yaml
+kubectl apply -n default -f petstore.yaml
 kubectl -n default rollout status deployment petstore
 ```
 
@@ -108,7 +126,15 @@ spec:
       protocol: HTTP
     hosts:
     - "petstore.com"
+    - "api.petstore.com"
+    - "developers.petstore.com"
 EOF
+```
+
+Check result:
+
+```
+kubectl get service -n istio-system
 ```
 
 ## Configure the Istio Gateway Route
@@ -157,13 +183,12 @@ helm repo update
 ```bash
 kubectl create namespace dev-portal
 helm install dev-portal dev-portal/dev-portal -n dev-portal --set istio.enabled=true --set licenseKey.value=LICENSE_HERE
-```
-Verify the install:
 
+```
+Verify the install. Wait until all deployments have completed and pods are running. It will take a few minutes.
 ```
 kubectl get all -n dev-portal
 ```
-
 
 ## Create an API Document
 
@@ -188,7 +213,7 @@ spec:
 EOF
 ```
 
-Check the status:
+Check the status. Look for `state: Succeeded`.
 
 ```
 kubectl get apidoc -n default petstore-schema -oyaml
@@ -241,6 +266,12 @@ spec:
 EOF
 ```
 
+Check the status. Look for `state: Succeeded`.
+
+```
+kubectl get apiproduct -n default petstore-product -oyaml
+```
+
 ## Create an Environment
 
 ```
@@ -264,14 +295,72 @@ spec:
 EOF
 ```
 
+Check the status. Look for `state: Succeeded`.
+
+```
+kubectl get environment -n default dev -oyaml
+```
+
 At this point you can check the status of the VirtualServices to make sure `dev` was created correctly:
 
 ```
 kubectl get virtualservice
 NAME       GATEWAYS                              HOSTS               AGE
-dev        [istio-system/istio-ingressgateway]   [api.example.com]   2m59s
+dev        [istio-system/istio-ingressgateway]   [api.petstore.com]  2m59s
 petstore   [istio-system/istio-ingressgateway]   [petstore.com]      85m
 ```
+
+You can also examine the VirtualService and associated Routes that were created from the APIDoc:
+
+```
+kubectl get virtualservice dev -oyaml
+```
+
+Then `curl` the VirtualService:
+
+```
+curl -HHost:api.petstore.com http://localhost/api/pets
+```
+
+## Create a Portal
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: devportal.solo.io/v1alpha1
+kind: Portal
+metadata:
+  name: petstore-portal
+  namespace: default
+spec:
+  displayName: Petstore Portal
+  description: The Gloo Portal for the Petstore API
+  banner:
+    fetchUrl: https://i.imgur.com/EXbBN1a.jpg
+  favicon:
+    fetchUrl: https://i.imgur.com/QQwlQG3.png
+  primaryLogo:
+    fetchUrl: https://i.imgur.com/hjgPMNP.png
+  customStyling: {}
+  staticPages: []
+
+  domains:
+  - developers.petstore.com
+
+  # This will include all API product of the environment in the portal
+  publishedEnvironments:
+  - name: dev
+    namespace: default
+EOF
+```
+
+Check the status. Look for `state: Succeeded`.
+
+```
+kubectl get portal -n default petstore-portal -oyaml
+```
+
+Use your web browser and go to http://developers.petstore.com.
+
 
 ## Next Steps
 
