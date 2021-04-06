@@ -19,7 +19,7 @@ spec:
           authority: acme.com
           cluster: remote-cluster
           
-    repoURL: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
+    repoURL: https://storage.googleapis.com/gloo-mesh-enterprise/enterprise-agent
     targetRevision: 1.0.0
   syncPolicy:
     automated:
