@@ -167,7 +167,7 @@ step ca certificate --offline management.acme.com server.crt server.key
 
 Management Root Certificate:
 ```
-kubectl create secret generic relay-root-tls-secret \
+kubectl create secret generic relay-root-tls-secret -n gloo-mesh \
   --from-file=ca.crt=certs/root_ca.crt \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-root-tls-secret.yaml
 ```
