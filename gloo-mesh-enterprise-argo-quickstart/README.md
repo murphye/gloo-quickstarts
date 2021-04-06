@@ -56,7 +56,7 @@ bash cluster-up.sh gloo-mesh-mgmt-cluster 6555
 
 Remote Cluster:
 ```bash
-bash cluster-up.sh gloo-mesh-remote-cluster 6556
+bash cluster-up.sh gloo-mesh-remote-cluster 6556 81 444
 ```
 
  will take a brief moment for MetalLB to install and run on each cluster. You can check with `kubectl --context k3d-gloo-mesh-mgmt-cluster get pods -n metallb-system` to make sure the pods are running.
@@ -96,7 +96,7 @@ With a browser, login with admin/generated-password at https://localhost:9870.
 ### Get Argo password for Remote Cluster
 
 ```
-kubectl config use-context k3d-gloo-mesh-mgmt-cluster
+kubectl config use-context k3d-gloo-mesh-remote-cluster
 kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
 kubectl port-forward svc/argocd-server --address 0.0.0.0 -n argocd 9871:443
 ```
@@ -202,6 +202,12 @@ Management Server Token:
 kubectl create secret generic relay-identity-token-secret \
   --from-literal=key=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-identity-token-secret.yaml
+
+Remote Server Token:
+
+kubectl create secret generic relay-identity-token-secret \
+  --from-literal=key=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
+  --dry-run=client -oyaml > remote/gloo-mesh/relay-identity-token-secret.yaml
 
 ## Management
 
