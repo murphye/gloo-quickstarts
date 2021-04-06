@@ -107,18 +107,9 @@ With a browser, login with admin/generated-password at https://localhost:9871.
 
 Istio needs to be installed on the remote cluster.
 
-`kubectl config use-context k3d-gloo-mesh-remote-cluster`
-
-
-helm install istiod manifests/charts/istio-control/istio-discovery \
-    --set revision=canary \
-    --set global.tag="1.9.2"
-    --set revision=1-9-2
-    -n istio-system
-
-
-
 ```
+kubectl config use-context k3d-gloo-mesh-remote-cluster
+
 istioctl operator init
 
 kubectl create ns istio-system
@@ -135,7 +126,11 @@ EOF
 ```
 
 
-## Generate Certificates
+## Supplemental Commands
+
+These are the steps taken to generate the certificates and the Secrets packaged in this demo. These steps are not necessary, but may be helpful if you choose to adapt this demo.
+
+### Generate Certificates
 
 ```
 step ca init --name="*.acme.com" --dns="*.acme.com"
@@ -164,6 +159,8 @@ Generating intermediate certificate...
 ```
 step ca certificate --offline management.acme.com server.crt server.key 
 ```
+
+### Generate Secrets
 
 Management Root Certificate:
 ```
@@ -209,13 +206,3 @@ kubectl create secret generic relay-identity-token-secret \
   --from-literal=token=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
   --dry-run=client -oyaml > remote/gloo-mesh/relay-identity-token-secret.yaml
 
-## Management
-
-kubectl apply -n gloo-mesh -f relay-root-tls-secret.yaml
-kubectl apply -n gloo-mesh -f relay-tls-signing-secret
-kubectl apply -n gloo-mesh -f relay-server-tls-secret.yaml
-
-## Remote
-
-kubectl apply -n gloo-mesh -f relay-root-tls-secret.yaml
-kubectl apply -n gloo-mesh -f relay-identity-token-secret.yaml
