@@ -9,7 +9,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: gloo-mesh
-  project: gloo-mesh
+  project: default
   source:
     chart: enterprise-agent
     helm:
