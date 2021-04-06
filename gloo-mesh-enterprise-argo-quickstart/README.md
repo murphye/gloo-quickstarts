@@ -51,12 +51,12 @@ This Kubernetes Cluster uses [k3d](http://k3d.io) and [MetalLB](https://metallb.
 
 Management Cluster:
 ```bash
-bash cluster-up.sh gloo-mesh-mgmt-cluster 6555
+bash cluster-up-mgmt.sh gloo-mesh-mgmt-cluster 6555
 ```
 
 Remote Cluster:
 ```bash
-bash cluster-up.sh gloo-mesh-remote-cluster 6556 81 444
+bash cluster-up-remote.sh gloo-mesh-remote-cluster 6556 81 444
 ```
 
  will take a brief moment for MetalLB to install and run on each cluster. You can check with `kubectl --context k3d-gloo-mesh-mgmt-cluster get pods -n metallb-system` to make sure the pods are running.
@@ -71,7 +71,6 @@ You can change the context with `kubectl config use-context k3d-gloo-mesh-mgmt-c
 kubectl config use-context k3d-gloo-mesh-mgmt-cluster
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-#kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 ```
 
 ### Install Argo onto Remote Cluster
@@ -80,7 +79,6 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 kubectl config use-context k3d-gloo-mesh-remote-cluster
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 ```
 
 ### Get Argo password for Management Cluster
