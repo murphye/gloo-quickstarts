@@ -16,7 +16,7 @@ spec:
       values: |
         relay:
           serverAddress: 192.168.86.51:9900
-          authority: *.acme.com
+          authority: "*.acme.com"
           cluster: remote-cluster
           
     repoURL: https://storage.googleapis.com/gloo-mesh-enterprise/enterprise-agent
