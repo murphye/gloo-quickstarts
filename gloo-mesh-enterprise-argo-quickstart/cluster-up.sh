@@ -2,8 +2,10 @@
 
 k3d_cluster_name=${1:-default}
 k3d_cluster_port=${2:-6443}
+k3d_http_port=${3:-80}
+k3d_https_port=${4:-443}
 
-k3d cluster create --servers 1 --network k3d-$k3d_cluster_name --api-port $k3d_cluster_port -p "80:80@server[0]" -p "443:443@server[0]" --no-lb --k3s-server-arg '--no-deploy=traefik' $k3d_cluster_name
+k3d cluster create --servers 1 --network k3d-$k3d_cluster_name --api-port $k3d_cluster_port -p "$k3d_http_port:80@server[0]" -p "$k3d_https_port:443@server[0]" --no-lb --k3s-server-arg '--no-deploy=traefik' $k3d_cluster_name
 
 subnet=$(docker network inspect k3d-$k3d_cluster_name | jq -r '.[0].IPAM.Config[0].Subnet')
 ipParts=(${subnet//./ })
