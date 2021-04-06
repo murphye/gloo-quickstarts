@@ -15,7 +15,7 @@ spec:
     helm:
       values: |
         relay:
-          serverAddress: management-cluster.acme.com:43
+          serverAddress: 192.168.86.51:43
           authority: acme.com
           cluster: remote-cluster
           
