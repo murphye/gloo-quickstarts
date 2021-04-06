@@ -197,6 +197,12 @@ kubectl create secret generic relay-server-tls-secret \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-server-tls-secret.yaml
 ```
 
+Management Server Token:
+
+kubectl create secret generic relay-identity-token-secret \
+  --from-literal=key=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
+  --dry-run=client -oyaml > mgmt/gloo-mesh/relay-identity-token-secret.yaml
+
 ## Management
 
 kubectl apply -n gloo-mesh -f relay-root-tls-secret.yaml

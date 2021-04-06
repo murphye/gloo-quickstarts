@@ -18,8 +18,6 @@ spec:
           enterpriseNetworking:
             serviceType: LoadBalancer
           selfSigned: false
-          tokenSecret:
-            key: 2c0097c0-f789-4435-ab00-8c3ab33b5bc5
         # Expires 2021-04-19T15:37:23-07:00
         licenseKey: eyJleHAiOjE2MTg4NzE4NDMsImlhdCI6MTYxNzY2MjI0MywiayI6Ijd3cG5NdyIsImx0IjoiZW50IiwicHJvZHVjdCI6Imdsb28tbWVzaCJ9.k7qfp-_Uetl8__oVx9oN47SA0bWYyiknvjypDLvHPwo
     repoURL: https://storage.googleapis.com/gloo-mesh-enterprise/gloo-mesh-enterprise
