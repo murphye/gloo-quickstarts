@@ -131,7 +131,7 @@ These are the steps taken to generate the certificates and the Secrets packaged 
 ### Generate Certificates
 
 ```
-step ca init --name="*.acme.com" --dns="*.acme.com"
+step ca init --name="host.k3d.internal" --dns="host.k3d.internal"
 ```
 
 ```
@@ -155,7 +155,7 @@ Generating intermediate certificate...
 ```
 
 ```
-step ca certificate --offline management.acme.com server.crt server.key 
+step ca certificate --offline host.k3d.internal server.crt server.key 
 ```
 
 ### Generate Secrets
@@ -163,32 +163,32 @@ step ca certificate --offline management.acme.com server.crt server.key
 Management Root Certificate:
 ```
 kubectl create secret generic relay-root-tls-secret -n gloo-mesh \
-  --from-file=ca.crt=certs/root_ca.crt \
+  --from-file=ca.crt=certs/relay-root.crt \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-root-tls-secret.yaml
 ```
 
 Remote Root Certificate:
 ```
 kubectl create secret generic relay-root-tls-secret \
-  --from-file=ca.crt=certs/root_ca.crt \
+  --from-file=ca.crt=certs/relay-tls-signing.crt \
   --dry-run=client -oyaml > remote/gloo-mesh/relay-root-tls-secret.yaml
 ```
 
 Management Signing Certificate:
 ```
 kubectl create secret generic relay-tls-signing-secret \
-  --from-file=tls.key=certs/intermediate_ca_key \
-  --from-file=tls.crt=certs/intermediate_ca.crt \
-  --from-file=ca.crt=certs/root_ca.crt \
+  --from-file=tls.key=certs/relay-tls-signing.key \
+  --from-file=tls.crt=certs/relay-tls-signing.crt \
+  --from-file=ca.crt=certs/relay-root.crt \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-tls-signing-secret.yaml
 ```
 
 Management Server Certificate:
 ```
 kubectl create secret generic relay-server-tls-secret \
-  --from-file=tls.key=certs/server.key \
-  --from-file=tls.crt=certs/server.crt \
-  --from-file=ca.crt=certs/root_ca.crt \
+  --from-file=tls.key=certs/relay-server-tls.key \
+  --from-file=tls.crt=certs/relay-server-tls.crt \
+  --from-file=ca.crt=certs/relay-root.crt \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-server-tls-secret.yaml
 ```
 
