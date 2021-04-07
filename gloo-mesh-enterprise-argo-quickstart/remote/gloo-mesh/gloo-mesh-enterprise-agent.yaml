@@ -15,8 +15,8 @@ spec:
     helm:
       values: |
         relay:
-          serverAddress: management-cluster.acme.com:9900
-          authority: "*.acme.com"
+          serverAddress: host.k3d.internal:9900
+          authority: "enterprise-networking.gloo-mesh"
           cluster: remote-cluster
           
     repoURL: https://storage.googleapis.com/gloo-mesh-enterprise/enterprise-agent
