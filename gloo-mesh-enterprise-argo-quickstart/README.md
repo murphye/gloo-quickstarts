@@ -195,12 +195,22 @@ kubectl create secret generic relay-server-tls-secret -n gloo-mesh \
 Management Server Token:
 
 kubectl create secret generic relay-identity-token-secret -n gloo-mesh \
-  --from-literal=token=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
+  --from-literal=token=3b9640f5-c2d4-49b5-a906-c46e3b26bae0 \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-identity-token-secret.yaml
 
 Remote Server Token:
 
 kubectl create secret generic relay-identity-token-secret -n gloo-mesh \
-  --from-literal=token=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
+  --from-literal=token=3b9640f5-c2d4-49b5-a906-c46e3b26bae0 \
   --dry-run=client -oyaml > remote/gloo-mesh/relay-identity-token-secret.yaml
 
+
+
+
+
+kubectl get secret relay-root-tls-secret -n gloo-mesh -o jsonpath='{.data.ca\.crt}' | base64 -d > remote/gloo-mesh/ca.crt
+
+
+kubectl create secret generic relay-root-tls-secret -n gloo-mesh  \
+  --from-file=ca.crt=remote/gloo-mesh/ca.crt \
+  --dry-run=client -oyaml > remote/gloo-mesh/relay-root-tls-secret.yaml
