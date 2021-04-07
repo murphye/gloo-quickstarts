@@ -169,14 +169,14 @@ kubectl create secret generic relay-root-tls-secret -n gloo-mesh \
 
 Remote Root Certificate:
 ```
-kubectl create secret generic relay-root-tls-secret \
+kubectl create secret generic relay-root-tls-secret -n gloo-mesh  \
   --from-file=ca.crt=certs/relay-tls-signing.crt \
   --dry-run=client -oyaml > remote/gloo-mesh/relay-root-tls-secret.yaml
 ```
 
 Management Signing Certificate:
 ```
-kubectl create secret generic relay-tls-signing-secret \
+kubectl create secret generic relay-tls-signing-secret -n gloo-mesh \
   --from-file=tls.key=certs/relay-tls-signing.key \
   --from-file=tls.crt=certs/relay-tls-signing.crt \
   --from-file=ca.crt=certs/relay-root.crt \
@@ -185,7 +185,7 @@ kubectl create secret generic relay-tls-signing-secret \
 
 Management Server Certificate:
 ```
-kubectl create secret generic relay-server-tls-secret \
+kubectl create secret generic relay-server-tls-secret -n gloo-mesh \
   --from-file=tls.key=certs/relay-server-tls.key \
   --from-file=tls.crt=certs/relay-server-tls.crt \
   --from-file=ca.crt=certs/relay-root.crt \
@@ -194,13 +194,13 @@ kubectl create secret generic relay-server-tls-secret \
 
 Management Server Token:
 
-kubectl create secret generic relay-identity-token-secret \
+kubectl create secret generic relay-identity-token-secret -n gloo-mesh \
   --from-literal=token=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
   --dry-run=client -oyaml > mgmt/gloo-mesh/relay-identity-token-secret.yaml
 
 Remote Server Token:
 
-kubectl create secret generic relay-identity-token-secret \
+kubectl create secret generic relay-identity-token-secret -n gloo-mesh \
   --from-literal=token=2c0097c0-f789-4435-ab00-8c3ab33b5bc5 \
   --dry-run=client -oyaml > remote/gloo-mesh/relay-identity-token-secret.yaml
 
