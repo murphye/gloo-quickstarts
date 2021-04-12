@@ -1,0 +1,101 @@
+# to run define K3S_TOKEN, K3S_VERSION is optional, eg:
+# docker-compose up -d
+# docker-compose down
+# export EAST=$(PWD)/kubeconfig-east.yaml
+# export WEST=$(PWD)/kubeconfig-west.yaml
+# export CENTRAL=$(PWD)/kubeconfig-central.yaml
+
+version: '3'
+services:
+
+  server-east:
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    command: server --https-listen-port 6550 --disable traefik --disable servicelb --cluster-cidr "10.42.0.0/16" --service-cidr "10.43.0.0/16" --cluster-domain "cluster-east.local"
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_TOKEN=cluster-east
+    - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig-east.yaml
+    - K3S_KUBECONFIG_MODE=666
+    volumes:
+    - k3s-server-east:/var/lib/rancher/k3s
+    - .:/output
+    ports:
+    - 6550:6550
+    - 10080:80
+    - 10443:443
+
+  agent-east:
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_URL=https://server-east:6550
+    - K3S_TOKEN=cluster-east
+
+  server-central:
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    command: server --https-listen-port 6551 --disable traefik --disable servicelb --cluster-cidr "10.44.0.0/16" --service-cidr "10.45.0.0/16" --cluster-domain "cluster-central.local"
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_TOKEN=cluster-central
+    - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig-central.yaml
+    - K3S_KUBECONFIG_MODE=666
+    volumes:
+    - k3s-server-central:/var/lib/rancher/k3s
+    - .:/output
+    ports:
+    - 6551:6551
+    - 11080:80
+    - 11443:443
+  
+  agent-central:
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_URL=https://server-central:6551
+    - K3S_TOKEN=cluster-central
+
+  server-west:
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    command: server --https-listen-port 6552 --disable traefik --disable servicelb --cluster-cidr "10.46.0.0/16" --service-cidr "10.47.0.0/16" --cluster-domain "cluster-west.local"
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_TOKEN=cluster-west
+    - K3S_KUBECONFIG_OUTPUT=/output/kubeconfig-west.yaml
+    - K3S_KUBECONFIG_MODE=666
+    volumes:
+    - k3s-server-west:/var/lib/rancher/k3s
+    - .:/output
+    ports:
+    - 6552:6552
+    - 12080:80
+    - 12443:443
+
+  agent-west:
+    image: "rancher/k3s:${K3S_VERSION:-latest}"
+    tmpfs:
+    - /run
+    - /var/run
+    privileged: true
+    environment:
+    - K3S_URL=https://server-west:6552
+    - K3S_TOKEN=cluster-west
+
+volumes:
+  k3s-server-east: {}
+  k3s-server-west: {}
+  k3s-server-central: {}

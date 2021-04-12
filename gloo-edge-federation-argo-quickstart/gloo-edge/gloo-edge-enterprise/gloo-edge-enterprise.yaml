@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gloo-edge-enterprise
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gloo-system
+  project: default
+  source:
+    chart: gloo glooe/gloo-ee
+    helm:
+      values: |
+        # Replace with your key
+        license_key: eyJleHAiOjE2MTk0NjAyOTcsImlhdCI6MTYxODI1MDY5NywiayI6IkZuMlE2QSIsImx0IjoiZW50IiwicHJvZHVjdCI6Imdsb28ifQ.I4-A1CxeWjq7ATjFilAYzt2gRE9-ltT2iSVeaNEiW1U
+    repoURL: http://storage.googleapis.com/gloo-ee-helm
+    targetRevision: 1.0.0
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  syncOptions:
+    - CreateNamespace=true
