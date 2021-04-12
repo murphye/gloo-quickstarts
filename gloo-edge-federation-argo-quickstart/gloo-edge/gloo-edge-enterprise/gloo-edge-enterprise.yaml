@@ -11,7 +11,7 @@ spec:
     namespace: gloo-system
   project: default
   source:
-    chart: gloo
+    chart: gloo-ee
     helm:
       values: |
         # Replace with your key
