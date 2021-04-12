@@ -17,7 +17,7 @@ spec:
         # Replace with your key
         license_key: eyJleHAiOjE2MTk0NjAyOTcsImlhdCI6MTYxODI1MDY5NywiayI6IkZuMlE2QSIsImx0IjoiZW50IiwicHJvZHVjdCI6Imdsb28ifQ.I4-A1CxeWjq7ATjFilAYzt2gRE9-ltT2iSVeaNEiW1U
     repoURL: http://storage.googleapis.com/gloo-ee-helm
-    targetRevision: 1.0.0
+    targetRevision: 1.7.0
   syncPolicy:
     automated:
       prune: true
