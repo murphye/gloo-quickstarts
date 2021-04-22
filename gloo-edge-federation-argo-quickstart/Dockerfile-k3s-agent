@@ -1,0 +1,6 @@
+FROM rancher/k3s:latest
+
+COPY ./resolv.conf /tmp/resolv.conf
+
+ENTRYPOINT ["/bin/k3s"]
+CMD ["agent"]
