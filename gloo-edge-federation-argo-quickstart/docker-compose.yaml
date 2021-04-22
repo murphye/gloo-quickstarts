@@ -1,16 +1,29 @@
-# to run define K3S_TOKEN, K3S_VERSION is optional, eg:
 # docker-compose up -d
 # docker-compose down
-# export EAST=$(PWD)/kubeconfig-east.yaml
-# export WEST=$(PWD)/kubeconfig-west.yaml
-# export CENTRAL=$(PWD)/kubeconfig-central.yaml
+# docker-compose down -v
 
 version: '3'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
 services:
+
+  front-envoy:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontenvoy
+    ports:
+      - "9080:9080"
+      - "9443:9443"
+      - "8001:8001"
 
   server-east:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
-    command: server --https-listen-port 6550 --disable traefik --disable servicelb --cluster-cidr "10.42.0.0/16" --service-cidr "10.43.0.0/16" --cluster-domain "cluster-east.local"
+    command: server --https-listen-port 6550 --disable traefik --disable servicelb --cluster-cidr "10.42.0.0/16" --service-cidr "10.43.0.0/16" --cluster-domain "cluster.local"
     tmpfs:
     - /run
     - /var/run
@@ -26,6 +39,8 @@ services:
     - 6550:6550
     - 10080:80
     - 10443:443
+    extra_hosts: 
+      - "argocd:172.20.0.3"
 
   agent-east:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
@@ -36,10 +51,10 @@ services:
     environment:
     - K3S_URL=https://server-east:6550
     - K3S_TOKEN=cluster-east
-
+#
   server-central:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
-    command: server --https-listen-port 6551 --disable traefik --disable servicelb --cluster-cidr "10.44.0.0/16" --service-cidr "10.45.0.0/16" --cluster-domain "cluster-central.local"
+    command: server --https-listen-port 6551 --disable traefik --disable servicelb --cluster-cidr "10.44.0.0/16" --service-cidr "10.45.0.0/16" --cluster-domain "cluster.local"
     tmpfs:
     - /run
     - /var/run
@@ -64,11 +79,11 @@ services:
     privileged: true
     environment:
     - K3S_URL=https://server-central:6551
-    - K3S_TOKEN=cluster-central
+    - K3S_TOKEN=cluster-centralexit
 
   server-west:
     image: "rancher/k3s:${K3S_VERSION:-latest}"
-    command: server --https-listen-port 6552 --disable traefik --disable servicelb --cluster-cidr "10.46.0.0/16" --service-cidr "10.47.0.0/16" --cluster-domain "cluster-west.local"
+    command: server --https-listen-port 6552 --disable traefik --disable servicelb --cluster-cidr "10.46.0.0/16" --service-cidr "10.47.0.0/16" --cluster-domain "cluster.local"
     tmpfs:
     - /run
     - /var/run
